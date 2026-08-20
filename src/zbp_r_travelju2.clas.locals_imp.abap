@@ -1,3 +1,34 @@
+CLASS lsc_zr_travelju2 DEFINITION INHERITING FROM cl_abap_behavior_saver.
+
+  PROTECTED SECTION.
+
+    METHODS save_modified REDEFINITION.
+
+ENDCLASS.
+
+CLASS lsc_zr_travelju2 IMPLEMENTATION.
+
+ METHOD save_modified.
+   DATA: Travels             TYPE STANDARD TABLE OF ZR_TravelJU2,
+         Travel              TYPE                   ZR_TravelJU2,
+         events_to_be_raised TYPE TABLE FOR EVENT ZR_TravelJU2~StatusUpdated.
+
+   "raise the event whenever the status is changed to 'A' (Accepted)
+   IF update-travel IS NOT INITIAL.
+     LOOP AT update-travel INTO DATA(update_travel).
+       CLEAR events_to_be_raised.
+
+       IF update_travel-%control-ReviewStatus = if_abap_behv=>mk-on.
+         APPEND INITIAL LINE TO events_to_be_raised.
+         events_to_be_raised[ 1 ] = CORRESPONDING #( update_travel ).
+         RAISE ENTITY EVENT ZR_TravelJU2~StatusUpdated FROM events_to_be_raised.
+       ENDIF.
+     ENDLOOP.
+   ENDIF.
+ ENDMETHOD.
+
+ENDCLASS.
+
 CLASS lhc_zr_travelju2 DEFINITION INHERITING FROM cl_abap_behavior_handler.
   PRIVATE SECTION.
 

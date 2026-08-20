@@ -1,101 +1,109 @@
-managed implementation in class ZBP_R_TRAVELJU2 unique;
-strict ( 2 );
-with collaborative draft;
-extensible;
-define behavior for ZR_TRAVELJU2 alias Travel
-persistent table ztravelJU2
-extensible
-draft table ztravel_dju2 query ZR_TRAVEL_QUERYju2
-etag master LocalLastChangedAt
-lock master total etag LastChangedAt
-authorization master ( global )
-{
-  field ( readonly )
-  UUID,
-  LocalCreatedBy,
-  LocalCreatedAt,
-  LocalLastChangedBy,
-  LocalLastChangedAt,
-  LastChangedAt;
+  managed
+  with additional save                                  //ex04
+  implementation in class ZBP_R_TRAVELJU2 unique;
+  strict ( 2 );
+  with collaborative draft;                             //ex03
+  extensible;
+  define behavior for ZR_TRAVELJU2 alias Travel
+  persistent table ztravelJU2
+  extensible
+  draft table ztravel_dJU2 query ZR_TRAVEL_QUERYJU2     //ex03
+  etag master LocalLastChangedAt
+  lock master total etag LastChangedAt
+  authorization master ( global )
+  {
+    field ( readonly )
+    UUID,
+    LocalCreatedBy,
+    LocalCreatedAt,
+    LocalLastChangedBy,
+    LocalLastChangedAt,
+    LastChangedAt;
 
-  field ( numbering : managed )
-  UUID;
+    field ( numbering : managed )
+    UUID;
 
-  create;
-  update ( features : instance );                                    //ex02
-  delete ( features : instance );                                    //ex02
+    event StatusUpdated for side effects;               //ex04
 
-  determination setStatusToNew on modify { create; }                 //ex02
-
-  action ( features : instance ) bookTravel result [1] $self;        //ex02
-  action ( features : instance ) cancelTravel result [1] $self;      //ex02
-
-  draft action Activate optimized;
-  draft action Discard;
-  draft action Edit;
-  draft action Resume;
-  draft determine action Prepare;
-  draft action Share;
-
-  mapping for ztravelJU2 corresponding extensible
+    side effects                                        //ex04
     {
-      UUID               = UUID;
-      TravelID           = TRAVEL_ID;
-      AgencyID           = AGENCY_ID;
-      CustomerID         = CUSTOMER_ID;
-      BeginDate          = BEGIN_DATE;
-      EndDate            = END_DATE;
-      BookingFee         = BOOKING_FEE;
-      TotalPrice         = TOTAL_PRICE;
-      CurrencyCode       = CURRENCY_CODE;
-      Description        = DESCRIPTION;
-      Status             = STATUS;
-      ReviewStatus       = REVIEW_STATUS;
-      Notification       = NOTIFICATION;
-      LocalCreatedBy     = LOCAL_CREATED_BY;
-      LocalCreatedAt     = LOCAL_CREATED_AT;
-      LocalLastChangedBy = LOCAL_LAST_CHANGED_BY;
-      LocalLastChangedAt = LOCAL_LAST_CHANGED_AT;
-      LastChangedAt      = LAST_CHANGED_AT;
+      event StatusUpdated affects field ( Status, ReviewStatus, Notification );
     }
 
-  association _Booking { create; with draft; }
+    create;
+    update ( features : instance );                                    //ex02
+    delete ( features : instance );                                    //ex02
 
-}
+    determination setStatusToNew on modify { create; }                 //ex02
 
-define behavior for ZR_BOOKINGJU2 alias Booking
-persistent table zbookingJU2
-extensible
-draft table zbooking_dju2 query ZR_BOOKING_QUERYju2
-etag dependent by _Travel
-lock dependent by _Travel
-authorization dependent by _Travel
-{
-  field ( readonly )
-  UUID,
-  ParentUUID;
+    action ( features : instance ) bookTravel result [1] $self;        //ex02
+    action ( features : instance ) cancelTravel result [1] $self;      //ex02
 
-  field ( numbering : managed )
-  UUID;
+    draft action Activate optimized;
+    draft action Discard;
+    draft action Edit;
+    draft action Resume;
+    draft determine action Prepare;
+    draft action Share;                              //ex03
 
+    mapping for ztravelJU2 corresponding extensible
+      {
+        UUID               = UUID;
+        TravelID           = TRAVEL_ID;
+        AgencyID           = AGENCY_ID;
+        CustomerID         = CUSTOMER_ID;
+        BeginDate          = BEGIN_DATE;
+        EndDate            = END_DATE;
+        BookingFee         = BOOKING_FEE;
+        TotalPrice         = TOTAL_PRICE;
+        CurrencyCode       = CURRENCY_CODE;
+        Description        = DESCRIPTION;
+        Status             = STATUS;
+        ReviewStatus       = REVIEW_STATUS;
+        Notification       = NOTIFICATION;
+        LocalCreatedBy     = LOCAL_CREATED_BY;
+        LocalCreatedAt     = LOCAL_CREATED_AT;
+        LocalLastChangedBy = LOCAL_LAST_CHANGED_BY;
+        LocalLastChangedAt = LOCAL_LAST_CHANGED_AT;
+        LastChangedAt      = LAST_CHANGED_AT;
+      }
 
-  update;
-  delete;
+    association _Booking { create; with draft; }
 
-  mapping for zbookingJU2 corresponding extensible
-    {
-      UUID         = UUID;
-      ParentUUID   = PARENT_UUID;
-      BookingID    = BOOKING_ID;
-      BookingDate  = BOOKING_DATE;
-      CustomerID   = CUSTOMER_ID;
-      CarrierID    = CARRIER_ID;
-      ConnectionID = CONNECTION_ID;
-      FlightDate   = FLIGHT_DATE;
-      FlightPrice  = FLIGHT_PRICE;
-      CurrencyCode = CURRENCY_CODE;
-    }
+  }
 
-  association _Travel { with draft; }
+  define behavior for ZR_BOOKINGJU2 alias Booking
+  persistent table zbookingJU2
+  extensible
+  draft table zbooking_dJU2 query ZR_BOOKING_QUERYJU2   //ex03
+  etag dependent by _Travel
+  lock dependent by _Travel
+  authorization dependent by _Travel
+  {
+    field ( readonly )
+    UUID,
+    ParentUUID;
 
-}
+    field ( numbering : managed )
+    UUID;
+
+    update;
+    delete;
+
+    mapping for zbookingJU2 corresponding extensible
+      {
+        UUID         = UUID;
+        ParentUUID   = PARENT_UUID;
+        BookingID    = BOOKING_ID;
+        BookingDate  = BOOKING_DATE;
+        CustomerID   = CUSTOMER_ID;
+        CarrierID    = CARRIER_ID;
+        ConnectionID = CONNECTION_ID;
+        FlightDate   = FLIGHT_DATE;
+        FlightPrice  = FLIGHT_PRICE;
+        CurrencyCode = CURRENCY_CODE;
+      }
+
+    association _Travel { with draft; }
+
+  }

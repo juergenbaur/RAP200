@@ -1,14 +1,16 @@
-projection implementation in class ZBP_C_TRAVELju2 unique;
+projection implementation in class ZBP_C_TRAVELJU2 unique;
 strict ( 2 );
 extensible;
 use collaborative draft;
-use side effects;
-define behavior for ZC_TRAVELju2 alias Travel
+use side effects;                               //ex04
+define behavior for ZC_TRAVELJU2 alias Travel
 extensible
 use etag
 {
 
   field ( readonly ) Status, ReviewStatus, Notification;
+
+  use event StatusUpdated;                      //ex04
 
   use create;
   use update;
@@ -28,7 +30,7 @@ use etag
 
 }
 
-define behavior for ZC_BOOKINGju2 alias Booking
+define behavior for ZC_BOOKINGJU2 alias Booking
 extensible
 use etag
 {
