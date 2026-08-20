@@ -1,0 +1,12 @@
+@EndUserText: {
+  label: 'Service Definition for ZC_TRAVELJU2'
+}
+@ObjectModel: {
+  leadingEntity: {
+    name: 'ZC_TRAVELJU2'
+  }
+}
+define service ZUI_TRAVEL_O4JU2 provider contracts odata_v4_ui {
+  expose ZC_TRAVELJU2 as Travel;
+  expose ZC_BOOKINGJU2 as Booking;
+}
