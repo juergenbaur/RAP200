@@ -1,15 +1,21 @@
-projection implementation in class ZBP_C_TRAVELJU2 unique;
+projection implementation in class ZBP_C_TRAVELju2 unique;
 strict ( 2 );
 extensible;
 use draft;
 use side effects;
-define behavior for ZC_TRAVELJU2 alias Travel
+define behavior for ZC_TRAVELju2 alias Travel
 extensible
 use etag
 {
+
+  field ( readonly ) Status, ReviewStatus, Notification;
+
   use create;
   use update;
   use delete;
+
+  use action bookTravel;
+  use action cancelTravel;
 
   use action Edit;
   use action Activate;
@@ -21,7 +27,7 @@ use etag
 
 }
 
-define behavior for ZC_BOOKINGJU2 alias Booking
+define behavior for ZC_BOOKINGju2 alias Booking
 extensible
 use etag
 {

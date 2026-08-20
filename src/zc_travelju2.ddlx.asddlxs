@@ -1,232 +1,109 @@
 @Metadata.layer: #CORE
-@UI.headerInfo.title.type: #STANDARD
-@UI.headerInfo.title.value: 'TravelID'
-@UI.headerInfo.description.type: #STANDARD
-@UI.headerInfo.description.value: 'TravelID'
+
+@UI: {
+  headerInfo: {
+    title.type      : #STANDARD,
+    title.value     : 'TravelID',
+    typeName        : 'Travel',
+    typeNamePlural  : 'Travels',
+    description     : { type: #STANDARD, value: 'TravelID' }
+  },
+
+  presentationVariant: [{ text: 'Default' ,
+                            sortOrder:[{ by: 'TravelID', direction: #DESC }],
+//                            groupBy: [ 'Status' ],
+                            visualizations: [{ type: #AS_LINEITEM },
+                                             { type: #AS_LINEITEM }] }]
+}
 annotate view ZC_TRAVELJU2 with
 {
-  @EndUserText.label: 'UUID'
-  @UI.identification: [ {
-    position: 10 , 
-    label: 'UUID'
-  } ]
-  @UI.lineItem: [ {
-    position: 10 , 
-    label: 'UUID'
-  } ]
-  @UI.selectionField: [ {
-    position: 10 
-  } ]
-  UUID;
-  
+
   @UI.facet: [ {
-    label: 'General Information', 
-    id: 'GeneralInfo', 
-    purpose: #STANDARD, 
-    position: 20 , 
+    label: 'General Information',
+    id: 'GeneralInfo',
+    purpose: #STANDARD,
+    position: 10 ,
     type: #IDENTIFICATION_REFERENCE
-  }, 
+  },
   {
-    label: 'Booking Items', 
-    id: 'BookingItems', 
-    purpose: #STANDARD, 
-    position: 21 , 
-    type: #LINEITEM_REFERENCE, 
+    label: 'Booking Items',
+    id: 'BookingItems',
+    purpose: #STANDARD,
+    position: 11 ,
+    type: #LINEITEM_REFERENCE,
     targetElement: '_Booking'
   } ]
-  @UI.identification: [ {
-    position: 20 
-  } ]
-  @UI.lineItem: [ {
-    position: 20 
-  } ]
-  @UI.selectionField: [ {
-    position: 20 
-  } ]
+
+  @EndUserText.label: 'Travel UUID'
+  @UI.hidden: true
+  UUID;
+
+  @UI: {
+        lineItem:       [ { position: 20, importance: #HIGH } ],
+        identification: [ { position: 20 } ],
+        selectionField: [ { position: 20 } ]
+  }
   TravelID;
-  
-  @UI.identification: [ {
-    position: 30 
-  } ]
-  @UI.lineItem: [ {
-    position: 30 
-  } ]
-  @UI.selectionField: [ {
-    position: 30 
-  } ]
+
+  @UI: {
+        lineItem:       [ { position: 30, importance: #HIGH } ],
+        identification: [ { position: 30 } ],
+        selectionField: [ { position: 30 } ]
+  }
   AgencyID;
-  
-  @UI.identification: [ {
-    position: 40 
-  } ]
-  @UI.lineItem: [ {
-    position: 40 
-  } ]
-  @UI.selectionField: [ {
-    position: 40 
-  } ]
+
+  @UI: {
+        lineItem:       [ { position: 40 } ],
+        identification: [ { position: 40 } ]
+  }
   CustomerID;
-  
-  @EndUserText.label: 'BeginDate'
-  @UI.identification: [ {
-    position: 50 , 
-    label: 'BeginDate'
-  } ]
-  @UI.lineItem: [ {
-    position: 50 , 
-    label: 'BeginDate'
-  } ]
-  @UI.selectionField: [ {
-    position: 50 
-  } ]
-  BeginDate;
-  
-  @EndUserText.label: 'EndDate'
-  @UI.identification: [ {
-    position: 60 , 
-    label: 'EndDate'
-  } ]
-  @UI.lineItem: [ {
-    position: 60 , 
-    label: 'EndDate'
-  } ]
-  @UI.selectionField: [ {
-    position: 60 
-  } ]
-  EndDate;
-  
-  @UI.identification: [ {
-    position: 70 
-  } ]
-  @UI.lineItem: [ {
-    position: 70 
-  } ]
-  @UI.selectionField: [ {
-    position: 70 
-  } ]
+
+  @UI: {
+ //       lineItem:       [ { position: 50 } ],
+        identification: [ { position: 50 } ]
+  }
   BookingFee;
-  
-  @UI.identification: [ {
-    position: 80 
-  } ]
-  @UI.lineItem: [ {
-    position: 80 
-  } ]
-  @UI.selectionField: [ {
-    position: 80 
-  } ]
+
+  @UI: {
+        lineItem:       [ { position: 55, importance: #HIGH  } ],
+        identification: [ { position: 55 } ]
+  }
   TotalPrice;
-  
-  @UI.identification: [ {
-    position: 90 
-  } ]
-  @UI.lineItem: [ {
-    position: 90 
-  } ]
-  @UI.selectionField: [ {
-    position: 90 
-  } ]
-  CurrencyCode;
-  
-  @UI.identification: [ {
-    position: 100 
-  } ]
-  @UI.lineItem: [ {
-    position: 100 
-  } ]
-  @UI.selectionField: [ {
-    position: 100 
-  } ]
+
+  @UI: {
+      identification: [ { position: 60 } ]
+  }
+  BeginDate;
+
+  @UI: {
+      identification: [ { position: 70 } ]
+  }
+  EndDate;
+
+  @UI: {
+      identification: [ { position: 80 } ]
+  }
   Description;
-  
-  @UI.identification: [ {
-    position: 110 
-  } ]
-  @UI.lineItem: [ {
-    position: 110 
-  } ]
-  @UI.selectionField: [ {
-    position: 110 
-  } ]
+
+  @UI: {
+  lineItem:       [ { position: 90, importance: #HIGH },   //, criticality: 'ReviewStatus'
+                    { type: #FOR_ACTION, dataAction: 'bookTravel', label: 'Book Travel' },
+                    { type: #FOR_ACTION, dataAction: 'cancelTravel', label: 'Cancel Travel' } ],
+  identification: [ { position: 90 },    //, criticality: 'ReviewStatus'
+                    { type: #FOR_ACTION, dataAction: 'bookTravel', label: 'Book Travel' },
+                    { type: #FOR_ACTION, dataAction: 'cancelTravel', label: 'Cancel Travel' }  ]
+  }
   Status;
-  
-  @UI.identification: [ {
-    position: 120 
-  } ]
-  @UI.lineItem: [ {
-    position: 120 
-  } ]
-  @UI.selectionField: [ {
-    position: 120 
-  } ]
-  ReviewStatus;
-  
-  @EndUserText.label: 'Notification'
-  @UI.identification: [ {
-    position: 130 , 
-    label: 'Notification'
-  } ]
-  @UI.lineItem: [ {
-    position: 130 , 
-    label: 'Notification'
-  } ]
-  @UI.selectionField: [ {
-    position: 130 
-  } ]
+
+  //  @UI: {
+  //      identification: [ { position: 100, label: 'Review Status', criticality: 'ReviewStatus' } ]
+  //  }
+  //  ReviewStatus;
+
+  @UI: {
+      lineItem:       [ { position: 110, label: 'Notification', importance: #HIGH, criticality: 'ReviewStatus'  } ],
+      identification: [ { position: 110, label: 'Notification', criticality: 'ReviewStatus' } ]
+  }
   Notification;
-  
-  @UI.identification: [ {
-    position: 140 
-  } ]
-  @UI.lineItem: [ {
-    position: 140 
-  } ]
-  @UI.selectionField: [ {
-    position: 140 
-  } ]
-  LocalCreatedBy;
-  
-  @UI.identification: [ {
-    position: 150 
-  } ]
-  @UI.lineItem: [ {
-    position: 150 
-  } ]
-  @UI.selectionField: [ {
-    position: 150 
-  } ]
-  LocalCreatedAt;
-  
-  @UI.identification: [ {
-    position: 160 
-  } ]
-  @UI.lineItem: [ {
-    position: 160 
-  } ]
-  @UI.selectionField: [ {
-    position: 160 
-  } ]
-  LocalLastChangedBy;
-  
-  @UI.identification: [ {
-    position: 170 
-  } ]
-  @UI.lineItem: [ {
-    position: 170 
-  } ]
-  @UI.selectionField: [ {
-    position: 170 
-  } ]
-  LocalLastChangedAt;
-  
-  @UI.identification: [ {
-    position: 180 
-  } ]
-  @UI.lineItem: [ {
-    position: 180 
-  } ]
-  @UI.selectionField: [ {
-    position: 180 
-  } ]
-  LastChangedAt;
+
 }
