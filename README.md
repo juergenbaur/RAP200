@@ -1,6 +1,9 @@
 # RAP200. Create RAP from scratch
 [https://github.com/SAP-samples/abap-platform-rap110](https://github.com/SAP-samples/abap-platform-rap200)
 
+## Exercise 5: Using the Backgroung Processing Framework (bgPF)
+https://github.com/SAP-samples/abap-platform-rap200/blob/main/exercises/ex05/README.md
+
 ## Exercise 4: Add Event-driven RAP Side Effects
 https://github.com/SAP-samples/abap-platform-rap200/tree/main/exercises/ex04/README.md
 
