@@ -1,0 +1,11 @@
+@EndUserText.label: 'Access control for ZR_TRAVEL_QUERYJU2'
+@MappingRole: true
+define role ZR_TRAVEL_QUERYJU2 {
+     grant  
+     select
+       on
+         ZR_TRAVEL_QUERYJU2
+           where
+             inheriting conditions from entity ZR_TRAVELJU2;
+                        
+}

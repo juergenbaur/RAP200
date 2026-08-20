@@ -1,11 +1,11 @@
 managed implementation in class ZBP_R_TRAVELJU2 unique;
 strict ( 2 );
-with draft;
+with collaborative draft;
 extensible;
 define behavior for ZR_TRAVELJU2 alias Travel
 persistent table ztravelJU2
 extensible
-draft table ztravel_dJU2
+draft table ztravel_dju2 query ZR_TRAVEL_QUERYju2
 etag master LocalLastChangedAt
 lock master total etag LastChangedAt
 authorization master ( global )
@@ -35,6 +35,7 @@ authorization master ( global )
   draft action Edit;
   draft action Resume;
   draft determine action Prepare;
+  draft action Share;
 
   mapping for ztravelJU2 corresponding extensible
     {
@@ -65,7 +66,7 @@ authorization master ( global )
 define behavior for ZR_BOOKINGJU2 alias Booking
 persistent table zbookingJU2
 extensible
-draft table zbooking_dJU2
+draft table zbooking_dju2 query ZR_BOOKING_QUERYju2
 etag dependent by _Travel
 lock dependent by _Travel
 authorization dependent by _Travel
