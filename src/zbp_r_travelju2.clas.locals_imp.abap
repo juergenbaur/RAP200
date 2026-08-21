@@ -8,24 +8,36 @@ ENDCLASS.
 
 CLASS lsc_zr_travelju2 IMPLEMENTATION.
 
- METHOD save_modified.
-   DATA: Travels             TYPE STANDARD TABLE OF ZR_TravelJU2,
-         Travel              TYPE                   ZR_TravelJU2,
-         events_to_be_raised TYPE TABLE FOR EVENT ZR_TravelJU2~StatusUpdated.
+  METHOD save_modified.
+    DATA: Travels             TYPE STANDARD TABLE OF ZR_Travelju2,
+          Travel              TYPE                   ZR_Travelju2,
+          events_to_be_raised TYPE TABLE FOR EVENT ZR_Travelju2~StatusUpdated.
 
-   "raise the event whenever the status is changed to 'A' (Accepted)
-   IF update-travel IS NOT INITIAL.
-     LOOP AT update-travel INTO DATA(update_travel).
-       CLEAR events_to_be_raised.
+    "raise the event whenever the status is changed
+    IF update-travel IS NOT INITIAL.
 
-       IF update_travel-%control-ReviewStatus = if_abap_behv=>mk-on.
-         APPEND INITIAL LINE TO events_to_be_raised.
-         events_to_be_raised[ 1 ] = CORRESPONDING #( update_travel ).
-         RAISE ENTITY EVENT ZR_TravelJU2~StatusUpdated FROM events_to_be_raised.
-       ENDIF.
-     ENDLOOP.
-   ENDIF.
- ENDMETHOD.
+      LOOP AT update-travel INTO DATA(update_travel).
+        CLEAR events_to_be_raised.
+
+        IF update_travel-%control-Status = if_abap_behv=>mk-on.
+
+          IF update_travel-Status = zrap200_if_travelju2=>travel_status-planned.   "ex05_begin
+            "start review workflow if the review status is set to planned
+            DATA(process_monitor_string) = zrap200_start_bgpf_ju2=>run_via_bgpf_tx_uncontrolled(
+              EXPORTING
+              i_rap_bo_entity          = update_travel
+            ).
+          ENDIF.  "ex05_end
+
+          APPEND INITIAL LINE TO events_to_be_raised.
+          events_to_be_raised[ 1 ] = CORRESPONDING #( update_travel ).
+          RAISE ENTITY EVENT ZR_Travelju2~StatusUpdated FROM events_to_be_raised.
+
+        ENDIF.
+      ENDLOOP.
+    ENDIF.
+
+  ENDMETHOD.
 
 ENDCLASS.
 
@@ -93,12 +105,12 @@ CLASS lhc_zr_travelju2 IMPLEMENTATION.
        ENTITY Travel
        UPDATE FIELDS ( Status ReviewStatus Notification )
        WITH VALUE #( FOR key IN keys ( %tky    = key-%tky
-                                        Status       = zrap200_if_travelju2=>travel_status-booked
-                                        ReviewStatus = zrap200_if_travelju2=>review_status-booked
-                                        Notification = 'Travel manually booked'
+                                        Status       = zrap200_if_travelju2=>travel_status-planned   "ex05
+                                        ReviewStatus = zrap200_if_travelju2=>review_status-planned   "ex05
+                                        Notification = 'Travel set to planned and sent to review'    "ex05
                                       ) )
-    FAILED failed
-    REPORTED reported.
+        FAILED failed
+        REPORTED reported.
 
     "read changed data for action result
     READ ENTITIES OF ZR_Travelju2 IN LOCAL MODE
