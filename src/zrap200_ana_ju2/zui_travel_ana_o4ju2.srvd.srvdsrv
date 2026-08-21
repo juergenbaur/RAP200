@@ -1,0 +1,7 @@
+@EndUserText.label: 'Service Definition for ZC_TRAVEL_ANAJU2'
+@ObjectModel.leadingEntity.name: 'ZC_TRAVEL_ANAJU2'
+define service ZUI_TRAVEL_ANA_O4JU2
+  provider contracts odata_v4_ui {
+  expose ZC_TRAVEL_ANAJU2  as Travel;
+  expose ZC_BOOKING_ANAJU2 as Booking;
+}
