@@ -1,6 +1,9 @@
 # RAP200. Create RAP from scratch
 [https://github.com/SAP-samples/abap-platform-rap110](https://github.com/SAP-samples/abap-platform-rap200)
 
+## Exercise 6: Developing Read-Only RAP Analytical Tables
+https://github.com/SAP-samples/abap-platform-rap200/blob/main/exercises/ex06/README.md
+
 ## Exercise 5: Using the Backgroung Processing Framework (bgPF)
 https://github.com/SAP-samples/abap-platform-rap200/blob/main/exercises/ex05/README.md
 
